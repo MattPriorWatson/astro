@@ -10,8 +10,7 @@ const projects = defineCollection({
 		category: z.string(),
 		videoUrl: z.string().optional(),
 		heroImage: z.string(),
-		beforeImage: z.string().optional(),
-		afterImage: z.string().optional(),
+		galleryImages: z.array(z.string()).optional(), // List of up to 6 image URLs
 		featured: z.boolean().default(false),
 	}),
 });

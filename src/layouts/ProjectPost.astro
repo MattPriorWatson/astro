@@ -7,7 +7,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 
 type Props = CollectionEntry<'projects'>['data'];
 
-const { title, description, pubDate, client, category, videoUrl, heroImage, beforeImage, afterImage } = Astro.props;
+const { title, description, pubDate, client, category, videoUrl, galleryImages = [] } = Astro.props;
 ---
 
 <html lang="en">
@@ -15,27 +15,46 @@ const { title, description, pubDate, client, category, videoUrl, heroImage, befo
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
-				max-width: 1000px;
+				max-width: 1200px;
 				margin: 0 auto;
-				padding: 7em 1em 4em 1em;
+				padding: 8em 2em 4em 2em;
+			}
+			.project-header {
+				margin-bottom: 2.5rem;
+			}
+			.project-header h1 {
+				font-size: 3.2rem;
+				letter-spacing: -0.02em;
+				margin-bottom: 0.5rem;
 			}
 			.meta-bar {
 				display: flex;
 				gap: 2em;
-				margin: 1.5em 0 2.5em 0;
-				color: rgb(var(--gray));
+				color: var(--gray);
 				font-size: 0.95rem;
 				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 				padding-bottom: 1.5em;
+				margin-bottom: 2rem;
+			}
+			.meta-bar strong {
+				color: rgb(var(--black));
+			}
+			.prose-overview {
+				font-size: 1.15rem;
+				line-height: 1.8;
+				color: #d1d5db;
+				margin-bottom: 3.5rem;
+				max-width: 850px;
 			}
 			.video-wrapper {
 				position: relative;
 				padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
 				height: 0;
 				overflow: hidden;
-				border-radius: 8px;
-				margin-bottom: 3em;
+				border-radius: 10px;
+				margin-bottom: 4rem;
 				background: #000;
+				box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
 			}
 			.video-wrapper iframe {
 				position: absolute;
@@ -45,28 +64,43 @@ const { title, description, pubDate, client, category, videoUrl, heroImage, befo
 				height: 100%;
 				border: 0;
 			}
-			.stills-grid {
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				gap: 1.5em;
-				margin: 2.5em 0;
-			}
-			.still-container {
-				position: relative;
-			}
-			.still-label {
-				position: absolute;
-				bottom: 10px;
-				left: 10px;
-				background: rgba(0, 0, 0, 0.75);
-				padding: 4px 8px;
-				border-radius: 4px;
-				font-size: 0.75rem;
+			.gallery-section h2 {
+				font-size: 1.5rem;
 				text-transform: uppercase;
-				letter-spacing: 0.05em;
+				letter-spacing: 0.1em;
+				color: var(--gray);
+				margin-bottom: 2rem;
 			}
-			@media (max-width: 720px) {
-				.stills-grid {
+			.image-gallery {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.5rem;
+			}
+			.gallery-item {
+				aspect-ratio: 16/9;
+				overflow: hidden;
+				border-radius: 8px;
+				background: #000;
+				border: 1px solid rgba(255, 255, 255, 0.05);
+			}
+			.gallery-item img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+				transition: transform 0.4s ease;
+			}
+			.gallery-item:hover img {
+				transform: scale(1.03);
+			}
+			@media (max-width: 768px) {
+				main {
+					padding: 7em 1em 3em 1em;
+				}
+				.project-header h1 {
+					font-size: 2.2rem;
+				}
+				.image-gallery {
 					grid-template-columns: 1fr;
 				}
 			}
@@ -77,40 +111,41 @@ const { title, description, pubDate, client, category, videoUrl, heroImage, befo
 		<Header />
 		<main>
 			<article>
-				<h1>{title}</h1>
-				<div class="meta-bar">
-					<span><strong>Category:</strong> {category}</span>
-					{client && <span><strong>Client:</strong> {client}</span>}
-					<span><strong>Date:</strong> <FormattedDate date={pubDate} /></span>
+				<!-- Title & Meta -->
+				<header class="project-header">
+					<h1>{title}</h1>
+					<div class="meta-bar">
+						<span><strong>Category:</strong> {category}</span>
+						{client && <span><strong>Client:</strong> {client}</span>}
+						<span><strong>Date:</strong> <FormattedDate date={pubDate} /></span>
+					</div>
+				</header>
+
+				<!-- Project Overview (Text Top) -->
+				<div class="prose-overview">
+					<slot />
 				</div>
 
+				<!-- Video Embed -->
 				{videoUrl && (
 					<div class="video-wrapper">
 						<iframe src={videoUrl} title={title} allowfullscreen></iframe>
 					</div>
 				)}
 
-				{(beforeImage || afterImage) && (
-					<h3>Grade Comparison</h3>
-					<div class="stills-grid">
-						{beforeImage && (
-							<div class="still-container">
-								<img src={beforeImage} alt="LOG / Ungraded Still" />
-								<span class="still-label">LOG / Before</span>
-							</div>
-						)}
-						{afterImage && (
-							<div class="still-container">
-								<img src={afterImage} alt="Graded Still" />
-								<span class="still-label">Graded / After</span>
-							</div>
-						)}
-					</div>
+				<!-- 6-Image Gallery -->
+				{galleryImages.length > 0 && (
+					<section class="gallery-section">
+						<h2>Stills Gallery</h2>
+						<div class="image-gallery">
+							{galleryImages.slice(0, 6).map((imgUrl: string, index: number) => (
+								<div class="gallery-item">
+									<img src={imgUrl} alt={`${title} still ${index + 1}`} loading="lazy" />
+								</div>
+							))}
+						</div>
+					</section>
 				)}
-
-				<div class="prose">
-					<slot />
-				</div>
 			</article>
 		</main>
 		<Footer />
