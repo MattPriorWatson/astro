@@ -4,13 +4,26 @@ import ProjectPost from '../../layouts/ProjectPost.astro';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects');
-	return projects.map((project) => ({
-		params: { slug: project.slug || project.id },
-		props: { project },
-	}));
+	return projects.map((project) => {
+		const slug = String(project.slug ?? project.id ?? '').replace(/\.(md|mdx)$/i, '');
+		return {
+			params: { slug },
+			props: { slug },
+		};
+	});
 }
 
-const { project } = Astro.props;
+const { slug } = Astro.props;
+const projects = await getCollection('projects');
+const project = projects.find((entry) => {
+	const entrySlug = String(entry.slug ?? entry.id ?? '').replace(/\.(md|mdx)$/i, '');
+	return entrySlug === slug;
+});
+
+if (!project) {
+	throw new Error(`Project not found for slug: ${slug}`);
+}
+
 const { Content } = await project.render();
 ---
 
