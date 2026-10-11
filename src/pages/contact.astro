@@ -8,11 +8,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 	width="narrow"
 >
 	<header class="page-header">
-		<h1>Get in Touch</h1>
+		<h1>Contact</h1>
 		<p>Available for local suites and remote color grading workflows worldwide.</p>
 	</header>
 
-	<div class="panel contact">
+	<div class="contact">
 		<section>
 			<h2 class="label">Direct Inquiries</h2>
 			<p><a href="mailto:colorist@example.com" class="email-link">colorist@example.com</a></p>
@@ -25,8 +25,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 		<section>
 			<h2 class="label">Representation</h2>
-			<p><strong>Agency:</strong> Vision Artists</p>
-			<p><strong>Booking Agent:</strong> <a href="mailto:agent@visionartists.com">agent@visionartists.com</a></p>
+			<p><span class="muted">Agency</span> Vision Artists</p>
+			<p><span class="muted">Booking</span> <a href="mailto:agent@visionartists.com">agent@visionartists.com</a></p>
 		</section>
 
 		<section>
@@ -43,45 +43,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style>
 	.contact {
 		display: grid;
-		gap: 0;
-	}
-	.contact section {
-		padding-block: 1.75rem;
-		border-bottom: 1px solid var(--border);
-	}
-	.contact section:first-child {
-		padding-top: 0;
-	}
-	.contact section:last-child {
-		padding-bottom: 0;
-		border-bottom: 0;
+		gap: clamp(2rem, 5vw, 3rem);
 	}
 	.label {
-		margin: 0 0 0.5rem;
-		font-size: var(--text-xs);
-		font-weight: 700;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--text-muted);
+		margin-bottom: 0.5rem;
 	}
 	.contact p {
 		margin: 0 0 0.25rem;
 		color: var(--text);
 		font-size: var(--text-lg);
 	}
-	.contact strong {
+	.muted {
+		display: inline-block;
+		min-width: 5.5rem;
 		color: var(--text-muted);
-		font-weight: 400;
-		margin-right: 0.35em;
 	}
 	.email-link {
 		font-size: clamp(1.25rem, 1rem + 1.5vw, 1.75rem);
-		font-weight: 700;
 		overflow-wrap: anywhere;
-	}
-	.email-link:hover {
-		text-decoration: underline;
-		text-underline-offset: 4px;
 	}
 	.social-links {
 		display: flex;
@@ -90,12 +69,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		margin: 0;
 		padding: 0;
 		list-style: none;
-	}
-	.social-links a {
-		color: var(--text);
 		font-size: var(--text-lg);
-	}
-	.social-links a:hover {
-		color: var(--accent-text);
 	}
 </style>

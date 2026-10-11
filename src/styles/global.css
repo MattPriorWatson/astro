@@ -2,19 +2,13 @@
    Design tokens
    ========================================================================== */
 :root {
-	/* Colour */
-	--bg: #0e1013;
-	--surface: #171a1f;
-	--surface-raised: #1f232a;
-	--border: rgba(255, 255, 255, 0.08);
-	--border-strong: rgba(255, 255, 255, 0.16);
-	--text: #f0f2f5;
-	--text-body: #d1d5db;
-	--text-muted: #a3a9b5;
-	--accent: #b32424; /* fills: buttons, active pills (white text = 6.6:1) */
-	--accent-hover: #c92c2c;
-	--accent-text: #f2554d; /* red used as text on dark (5.6:1) */
-	--accent-text-hover: #ff7a73;
+	/* Colour — monochrome */
+	--bg: #0b0b0c;
+	--text: #ededed;
+	--text-body: #c4c4c8;
+	--text-muted: #8f8f95;
+	--rule: rgba(255, 255, 255, 0.12);
+	--focus: #ededed;
 
 	/* Type */
 	--font-sans: "Atkinson", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -22,21 +16,16 @@
 	--text-sm: 0.875rem;
 	--text-base: 1.0625rem;
 	--text-lg: 1.1875rem;
-	--text-h3: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
-	--text-h2: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
-	--text-h1: clamp(2.25rem, 1.6rem + 3vw, 3.75rem);
+	--text-h3: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+	--text-h2: clamp(1.4rem, 1.2rem + 1vw, 1.9rem);
+	--text-h1: clamp(2rem, 1.5rem + 2.4vw, 3.25rem);
 
 	/* Layout */
-	--gutter: clamp(1rem, 4vw, 2rem);
+	--gutter: clamp(1.25rem, 4vw, 2.5rem);
 	--header-h: 72px;
-	--width-narrow: 760px;
+	--width-narrow: 720px;
 	--width-default: 1200px;
 	--width-wide: 1400px;
-	--radius-sm: 6px;
-	--radius: 10px;
-	--radius-lg: 14px;
-	--shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
-	--ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ==========================================================================
@@ -68,6 +57,9 @@
 
 html {
 	color-scheme: dark;
+	/* Always reserve space for the scrollbar so the page never shifts sideways
+	   when it appears/disappears (short pages, menu open, lightbox open). */
+	scrollbar-gutter: stable;
 	scroll-padding-top: calc(var(--header-h) + 1rem);
 	-webkit-text-size-adjust: 100%;
 }
@@ -95,13 +87,14 @@ body > main {
 h1, h2, h3, h4, h5, h6 {
 	margin: 0 0 0.5rem;
 	color: var(--text);
+	font-weight: 400;
 	line-height: 1.15;
 	letter-spacing: -0.02em;
 	text-wrap: balance;
 }
 h1 { font-size: var(--text-h1); }
 h2 { font-size: var(--text-h2); }
-h3 { font-size: var(--text-h3); }
+h3 { font-size: var(--text-h3); letter-spacing: 0; }
 
 p {
 	margin: 0 0 1.25em;
@@ -110,45 +103,37 @@ p {
 }
 
 a {
-	color: var(--accent-text);
+	color: var(--text);
 	text-decoration: none;
-	transition: color 0.2s ease;
+	transition: opacity 0.2s ease;
 }
 a:hover {
-	color: var(--accent-text-hover);
+	opacity: 0.65;
 }
 
 img {
 	max-width: 100%;
 	height: auto;
 	display: block;
+	border-radius: 0;
 }
 
 strong, b { font-weight: 700; }
 
-code {
-	padding: 2px 6px;
-	background: var(--surface-raised);
-	border-radius: 4px;
-	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-	font-size: 0.9em;
-}
-
 hr {
 	border: none;
-	border-top: 1px solid var(--border);
+	border-top: 1px solid var(--rule);
 	margin: 2em 0;
 }
 
 :focus-visible {
-	outline: 2px solid var(--accent-text);
-	outline-offset: 3px;
-	border-radius: 3px;
+	outline: 1px solid var(--focus);
+	outline-offset: 4px;
 }
 
 ::selection {
-	background: var(--accent);
-	color: #fff;
+	background: var(--text);
+	color: var(--bg);
 }
 
 /* ==========================================================================
@@ -160,15 +145,12 @@ hr {
 	left: 0.75rem;
 	z-index: 2000;
 	padding: 0.6em 1em;
-	background: var(--accent);
-	color: #fff;
-	border-radius: var(--radius-sm);
+	background: var(--text);
+	color: var(--bg);
 	transform: translateY(-200%);
-	transition: transform 0.2s ease;
 }
 .skip-link:focus {
 	transform: translateY(0);
-	color: #fff;
 }
 
 .sr-only {
@@ -193,37 +175,37 @@ hr {
 .container--wide { max-width: calc(var(--width-wide) + var(--gutter) * 2); }
 
 .page {
-	padding-top: calc(var(--header-h) + clamp(2rem, 6vw, 4.5rem));
-	padding-bottom: clamp(3rem, 8vw, 5rem);
+	padding-top: calc(var(--header-h) + clamp(2rem, 6vw, 4rem));
+	padding-bottom: clamp(4rem, 10vw, 7rem);
 }
 
 .page-header {
-	margin-bottom: clamp(2rem, 5vw, 3.5rem);
+	margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+.page-header h1 {
+	margin: 0;
 }
 .page-header p {
 	color: var(--text-muted);
 	font-size: var(--text-lg);
-	max-width: 60ch;
-	margin: 0.5rem 0 0;
+	max-width: 56ch;
+	margin: 1rem 0 0;
 }
 
-.eyebrow {
-	display: block;
-	font-size: var(--text-xs);
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.14em;
-	color: var(--accent-text);
-	margin-bottom: 0.75rem;
-}
-
+/* Small uppercase label used for categories, section titles and meta */
+.label,
+.eyebrow,
 .section-title {
-	font-size: var(--text-sm);
-	font-weight: 700;
-	text-transform: uppercase;
-	letter-spacing: 0.14em;
-	color: var(--text-muted);
+	display: block;
 	margin: 0;
+	font-size: var(--text-xs);
+	font-weight: 400;
+	text-transform: uppercase;
+	letter-spacing: 0.16em;
+	color: var(--text-muted);
+}
+.eyebrow {
+	margin-bottom: 1rem;
 }
 
 .section-head {
@@ -235,23 +217,21 @@ hr {
 }
 
 .text-link {
-	font-size: var(--text-sm);
-	font-weight: 700;
-	letter-spacing: 0.04em;
+	font-size: var(--text-xs);
+	text-transform: uppercase;
+	letter-spacing: 0.16em;
+	color: var(--text-muted);
+}
+.text-link:hover {
+	color: var(--text);
+	opacity: 1;
 }
 
-.panel {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: var(--radius-lg);
-	padding: clamp(1.5rem, 4vw, 2.5rem);
-}
-
-/* Responsive project grid: 1 column on phones, 2 from ~860px up */
+/* Project cards: responsive grid, 1 column on phones, 2 from ~860px up */
 .projects-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
-	gap: clamp(1rem, 3vw, 2rem);
+	gap: clamp(2rem, 4vw, 3rem) clamp(1rem, 2.5vw, 2rem);
 }
 
 .empty-state {

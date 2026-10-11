@@ -17,7 +17,6 @@ import { SITE_TITLE } from '../consts';
 		>
 			<span></span>
 			<span></span>
-			<span></span>
 		</button>
 
 		<div class="nav-links" id="nav-links">
@@ -37,22 +36,15 @@ import { SITE_TITLE } from '../consts';
 		padding-inline: var(--gutter);
 	}
 
-	/*
-	 * The frosted-glass background lives on a pseudo-element, NOT on the header.
-	 * backdrop-filter on the header would turn it into the containing block for the
-	 * fixed-position mobile menu and clip the overlay to the header's height.
-	 */
+	/* Solid background fades in once the page has scrolled */
 	.site-header::before {
 		content: '';
 		position: absolute;
 		inset: 0;
 		z-index: -1;
-		background: rgba(14, 16, 19, 0.85);
-		backdrop-filter: blur(12px);
-		-webkit-backdrop-filter: blur(12px);
-		border-bottom: 1px solid var(--border);
+		background: var(--bg);
 		opacity: 0;
-		transition: opacity 0.3s ease;
+		transition: opacity 0.2s ease;
 	}
 	.site-header.scrolled::before,
 	:global(html.menu-open) .site-header::before {
@@ -72,35 +64,32 @@ import { SITE_TITLE } from '../consts';
 		position: relative;
 		z-index: 11;
 		color: var(--text);
-		font-size: 1.2rem;
-		font-weight: 700;
+		font-size: var(--text-base);
 		letter-spacing: -0.01em;
-	}
-	.brand:hover {
-		color: var(--text);
 	}
 
 	.nav-links {
 		display: flex;
 		align-items: center;
-		gap: 2.25rem;
+		gap: 2.5rem;
 	}
 	.nav-links :global(a) {
 		color: var(--text-muted);
-		font-size: var(--text-sm);
-		font-weight: 700;
-		letter-spacing: 0.06em;
+		font-size: var(--text-xs);
 		text-transform: uppercase;
+		letter-spacing: 0.16em;
 		padding: 0.5em 0;
-		border-bottom: 2px solid transparent;
-		transition: color 0.2s ease, border-color 0.2s ease;
+		transition: color 0.2s ease;
 	}
-	.nav-links :global(a:hover),
+	.nav-links :global(a:hover) {
+		color: var(--text);
+		opacity: 1;
+	}
 	.nav-links :global(a.active) {
 		color: var(--text);
-	}
-	.nav-links :global(a.active) {
-		border-bottom-color: var(--accent);
+		text-decoration: underline;
+		text-underline-offset: 8px;
+		text-decoration-thickness: 1px;
 	}
 
 	.menu-toggle {
@@ -118,24 +107,20 @@ import { SITE_TITLE } from '../consts';
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		gap: 5px;
+		gap: 6px;
 	}
 	.menu-toggle span {
 		display: block;
-		width: 24px;
-		height: 2px;
+		width: 22px;
+		height: 1px;
 		background: currentColor;
-		border-radius: 2px;
-		transition: transform 0.3s ease, opacity 0.2s ease;
+		transition: transform 0.2s ease;
 	}
 	.menu-toggle[aria-expanded='true'] span:nth-child(1) {
-		transform: translateY(7px) rotate(45deg);
+		transform: translateY(3.5px) rotate(45deg);
 	}
 	.menu-toggle[aria-expanded='true'] span:nth-child(2) {
-		opacity: 0;
-	}
-	.menu-toggle[aria-expanded='true'] span:nth-child(3) {
-		transform: translateY(-7px) rotate(-45deg);
+		transform: translateY(-3.5px) rotate(-45deg);
 	}
 
 	@media (max-width: 768px) {
@@ -151,24 +136,20 @@ import { SITE_TITLE } from '../consts';
 			height: 100dvh;
 			flex-direction: column;
 			justify-content: center;
-			gap: 1.75rem;
-			background: rgba(14, 16, 19, 0.98);
-			backdrop-filter: blur(20px);
-			-webkit-backdrop-filter: blur(20px);
+			gap: 2rem;
+			background: var(--bg);
 			/* hidden state removes links from tab order and the a11y tree */
 			visibility: hidden;
 			opacity: 0;
-			transform: translateY(-8px);
-			transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+			transition: opacity 0.2s ease, visibility 0s linear 0.2s;
 		}
 		.nav-links.expanded {
 			visibility: visible;
 			opacity: 1;
-			transform: none;
-			transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s;
+			transition: opacity 0.2s ease, visibility 0s;
 		}
 		.nav-links :global(a) {
-			font-size: 1.35rem;
+			font-size: 0.95rem;
 		}
 	}
 </style>
@@ -203,7 +184,7 @@ import { SITE_TITLE } from '../consts';
 		.matchMedia('(min-width: 769px)')
 		.addEventListener('change', (e) => e.matches && setMenu(false));
 
-	// Frosted background once the page has scrolled
+	// Solid background once the page has scrolled
 	const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 30);
 	window.addEventListener('scroll', onScroll, { passive: true });
 	onScroll();

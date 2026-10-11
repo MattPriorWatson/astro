@@ -1,0 +1,204 @@
+---
+import { getImageSize } from '../utils/imageSize';
+
+interface Props {
+	images: string[];
+	title: string;
+}
+
+const { images, title } = Astro.props;
+
+// Read each image's real dimensions so it is shown at its own aspect ratio
+const items = await Promise.all(
+	images.map(async (src) => ({ src, ...(await getImageSize(src)) }))
+);
+---
+
+{
+	items.length > 0 && (
+		<>
+			<ul class="gallery">
+				{items.map((item, index) => (
+					<li style={`--ar: ${item.ratio.toFixed(4)}`}>
+						<button
+							type="button"
+							class="gallery-item"
+							data-index={index}
+							aria-label={`View still ${index + 1} of ${items.length} full size`}
+						>
+							<img
+								src={item.src}
+								alt={`${title} still ${index + 1}`}
+								width={item.width}
+								height={item.height}
+								loading="lazy"
+								decoding="async"
+							/>
+						</button>
+					</li>
+				))}
+			</ul>
+
+			<dialog id="lightbox" class="lightbox" aria-label="Image viewer">
+				<button type="button" class="lb-btn lb-close" aria-label="Close">×</button>
+				<button type="button" class="lb-btn lb-prev" aria-label="Previous still">‹</button>
+				<img id="lightbox-img" alt="" />
+				<button type="button" class="lb-btn lb-next" aria-label="Next still">›</button>
+				<p id="lightbox-caption" class="lb-caption" aria-live="polite"></p>
+			</dialog>
+		</>
+	)
+}
+
+<style>
+	/*
+	 * Justified rows: every image keeps its own aspect ratio and images sharing a row
+	 * are scaled to the same height. flex-grow = ratio and flex-basis = ratio * row height
+	 * is what makes that work, so --ar is set per image.
+	 */
+	.gallery {
+		--gap: clamp(0.5rem, 1.5vw, 1rem);
+		--row-h: clamp(10rem, 24vw, 18rem); /* target row height */
+		--row-max: calc(var(--row-h) * 2.5); /* stops a lone last image growing huge */
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gap);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.gallery li {
+		flex: var(--ar) 1 calc(var(--ar) * var(--row-h));
+		max-width: calc(var(--ar) * var(--row-max));
+		min-width: 0;
+	}
+	.gallery-item {
+		display: block;
+		width: 100%;
+		padding: 0;
+		background: #000;
+		border: 0;
+		cursor: zoom-in;
+	}
+	.gallery-item img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: var(--ar);
+		transition: opacity 0.25s ease;
+	}
+	.gallery-item:hover img,
+	.gallery-item:focus-visible img {
+		opacity: 0.8;
+	}
+
+	/* Lightbox */
+	.lightbox {
+		width: 100%;
+		max-width: none;
+		height: 100%;
+		max-height: none;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: #000;
+		color: var(--text);
+	}
+	.lightbox[open] {
+		display: grid;
+		place-items: center;
+	}
+	.lightbox::backdrop {
+		background: #000;
+	}
+	.lightbox img {
+		max-width: calc(100% - 2rem);
+		max-height: calc(100dvh - 7rem);
+		width: auto;
+		height: auto;
+		object-fit: contain;
+	}
+	.lb-btn {
+		position: absolute;
+		display: grid;
+		place-items: center;
+		width: 56px;
+		height: 56px;
+		padding: 0 0 6px;
+		font: inherit;
+		font-size: 2.25rem;
+		font-weight: 400;
+		line-height: 1;
+		color: var(--text-muted);
+		background: none;
+		border: 0;
+		cursor: pointer;
+		transition: color 0.2s ease;
+	}
+	.lb-btn:hover {
+		color: var(--text);
+	}
+	.lb-close {
+		top: 0.75rem;
+		right: 0.75rem;
+	}
+	.lb-prev,
+	.lb-next {
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	.lb-prev {
+		left: 0.5rem;
+	}
+	.lb-next {
+		right: 0.5rem;
+	}
+	.lb-caption {
+		position: absolute;
+		bottom: 1.25rem;
+		left: 0;
+		right: 0;
+		margin: 0;
+		text-align: center;
+		font-size: var(--text-xs);
+		letter-spacing: 0.16em;
+		color: var(--text-muted);
+	}
+</style>
+
+<script>
+	const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+	const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
+	const caption = document.getElementById('lightbox-caption');
+	const items = Array.from(document.querySelectorAll<HTMLButtonElement>('.gallery-item'));
+	let current = 0;
+
+	function show(index: number) {
+		if (!img || !caption || items.length === 0) return;
+		current = (index + items.length) % items.length;
+		const source = items[current].querySelector('img');
+		img.src = source?.currentSrc || source?.src || '';
+		img.alt = source?.alt ?? '';
+		caption.textContent = `${current + 1} / ${items.length}`;
+	}
+
+	if (dialog && items.length > 0) {
+		items.forEach((btn, i) =>
+			btn.addEventListener('click', () => {
+				show(i);
+				dialog.showModal();
+			})
+		);
+		dialog.addEventListener('close', () => items[current]?.focus());
+		dialog.querySelector('.lb-close')?.addEventListener('click', () => dialog.close());
+		dialog.querySelector('.lb-prev')?.addEventListener('click', () => show(current - 1));
+		dialog.querySelector('.lb-next')?.addEventListener('click', () => show(current + 1));
+		// Click on the backdrop (outside the image and buttons) closes it
+		dialog.addEventListener('click', (e) => {
+			if (e.target === dialog) dialog.close();
+		});
+		dialog.addEventListener('keydown', (e) => {
+			if (e.key === 'ArrowLeft') show(current - 1);
+			if (e.key === 'ArrowRight') show(current + 1);
+		});
+	}
+</script>

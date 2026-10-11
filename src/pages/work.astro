@@ -54,32 +54,30 @@ const categories = uniqueCategories.length > 1 ? ['All', ...uniqueCategories] : 
 	.filter-bar {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.6rem;
-		margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+		gap: 0.5rem 2rem;
+		margin-bottom: clamp(2rem, 5vw, 3rem);
 	}
 	.filter-btn {
+		padding: 0.4em 0;
 		font: inherit;
-		font-size: var(--text-sm);
-		font-weight: 700;
-		letter-spacing: 0.04em;
+		font-size: var(--text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
 		line-height: 1;
-		min-height: 40px;
-		padding: 0.7em 1.3em;
-		background: transparent;
 		color: var(--text-muted);
-		border: 1px solid var(--border-strong);
-		border-radius: 999px;
+		background: none;
+		border: 0;
 		cursor: pointer;
-		transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+		transition: color 0.2s ease;
 	}
 	.filter-btn:hover {
 		color: var(--text);
-		border-color: var(--text-muted);
 	}
 	.filter-btn[aria-pressed='true'] {
-		background: var(--accent);
-		border-color: var(--accent);
-		color: #fff;
+		color: var(--text);
+		text-decoration: underline;
+		text-underline-offset: 8px;
+		text-decoration-thickness: 1px;
 	}
 </style>
 
