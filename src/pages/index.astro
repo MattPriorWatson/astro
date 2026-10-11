@@ -19,9 +19,6 @@ const featuredProjects = allProjects.filter(project => project.data.featured);
 		<main>
 			<!-- Hero Showreel Section -->
 			<section class="hero">
-				<h1>Film Colourist</h1>
-				<p class="tagline">Crafting cinematic narratives through precise color grading and tone management.</p>
-				
 				<div class="reel-container">
 					<iframe 
 						src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
@@ -32,19 +29,18 @@ const featuredProjects = allProjects.filter(project => project.data.featured);
 				</div>
 			</section>
 
-			<!-- Featured Work Section -->
+			<!-- Featured Work Gallery -->
 			<section class="featured-work">
 				<h2>Featured Work</h2>
 				<div class="projects-grid">
 					{featuredProjects.map(project => (
-						<a href={`/projects/${project.slug}`} class="project-card">
+						<a href={`/projects/${project.slug || project.id}`} class="project-card">
 							<div class="image-wrapper">
 								<img src={project.data.heroImage} alt={project.data.title} />
-								<span class="category-tag">{project.data.category}</span>
-							</div>
-							<div class="project-info">
-								<h3>{project.data.title}</h3>
-								<p>{project.data.description}</p>
+								<div class="card-overlay">
+									<span class="category-tag">{project.data.category}</span>
+									<h3>{project.data.title}</h3>
+								</div>
 							</div>
 						</a>
 					))}
@@ -55,24 +51,12 @@ const featuredProjects = allProjects.filter(project => project.data.featured);
 
 		<style>
 			main {
-				max-width: 1200px;
+				max-width: 1400px;
 				margin: 0 auto;
-				padding: 8em 2em 4em 2em;
+				padding: 7em 2em 4em 2em;
 			}
 			.hero {
-				text-align: center;
-				margin-bottom: 6rem;
-			}
-			.hero h1 {
-				font-size: 3.5rem;
-				margin-bottom: 0.5rem;
-				letter-spacing: -0.03em;
-			}
-			.tagline {
-				font-size: 1.25rem;
-				color: var(--gray);
-				max-width: 600px;
-				margin: 0 auto 3rem auto;
+				margin-bottom: 5rem;
 			}
 			.reel-container {
 				position: relative;
@@ -81,7 +65,7 @@ const featuredProjects = allProjects.filter(project => project.data.featured);
 				overflow: hidden;
 				border-radius: 12px;
 				background: #000;
-				box-shadow: var(--box-shadow);
+				box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
 			}
 			.reel-container iframe {
 				position: absolute;
@@ -92,81 +76,82 @@ const featuredProjects = allProjects.filter(project => project.data.featured);
 				border: 0;
 			}
 			.featured-work h2 {
-				font-size: 2rem;
+				font-size: 1.5rem;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: var(--gray);
 				margin-bottom: 2rem;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-				padding-bottom: 0.75rem;
 			}
 			.projects-grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-				gap: 2rem;
+				grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+				gap: 2.5rem;
 			}
 			.project-card {
-				background: rgb(var(--gray-light));
-				border-radius: 8px;
+				display: block;
+				border-radius: 10px;
 				overflow: hidden;
 				text-decoration: none;
-				transition: transform 0.3s ease, box-shadow 0.3s ease;
-				border: 1px solid rgba(255, 255, 255, 0.03);
+				background: #000;
+				border: 1px solid rgba(255, 255, 255, 0.05);
+				transition: transform 0.4s ease, box-shadow 0.4s ease;
 			}
 			.project-card:hover {
-				transform: translateY(-4px);
-				box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+				transform: translateY(-6px);
+				box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
 			}
 			.image-wrapper {
 				position: relative;
-				aspect-ratio: 16/9;
+				aspect-ratio: 16/10;
 				overflow: hidden;
 			}
 			.image-wrapper img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
-				transition: transform 0.5s ease;
+				transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 			}
 			.project-card:hover .image-wrapper img {
-				transform: scale(1.03);
+				transform: scale(1.04);
+			}
+			.card-overlay {
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(to top, rgba(18, 20, 23, 0.9) 0%, rgba(18, 20, 23, 0.2) 50%, transparent 100%);
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				padding: 2rem;
+				opacity: 0.9;
+				transition: opacity 0.3s ease;
+			}
+			.project-card:hover .card-overlay {
+				opacity: 1;
 			}
 			.category-tag {
-				position: absolute;
-				top: 12px;
-				left: 12px;
-				background: rgba(18, 20, 23, 0.85);
-				backdrop-filter: blur(8px);
-				padding: 4px 10px;
-				border-radius: 4px;
 				font-size: 0.75rem;
 				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				color: rgb(var(--black));
-			}
-			.project-info {
-				padding: 1.5rem;
-			}
-			.project-info h3 {
-				font-size: 1.25rem;
+				letter-spacing: 0.1em;
+				color: var(--accent);
+				font-weight: 700;
 				margin-bottom: 0.5rem;
-				color: rgb(var(--black));
 			}
-			.project-info p {
-				font-size: 0.9rem;
-				color: var(--gray);
+			.card-overlay h3 {
+				font-size: 1.8rem;
 				margin: 0;
-				display: -webkit-box;
-				-webkit-line-clamp: 2;
-				-webkit-box-orient: vertical;
-				overflow: hidden;
+				color: #fff;
+				font-weight: 600;
+				letter-spacing: -0.01em;
 			}
 			@media (max-width: 768px) {
 				main {
-					padding: 7em 1em 3em 1em;
-				}
-				.hero h1 {
-					font-size: 2.5rem;
+					padding: 6em 1em 3em 1em;
 				}
 				.projects-grid {
 					grid-template-columns: 1fr;
+				}
+				.card-overlay h3 {
+					font-size: 1.4rem;
 				}
 			}
 		</style>

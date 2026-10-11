@@ -17,63 +17,29 @@ import Footer from '../components/Footer.astro';
 				<p>Available for local suites and remote color grading workflows worldwide.</p>
 			</section>
 
-			<div class="contact-grid">
-				<!-- Booking Inquiry Form -->
-				<form class="contact-form" action="#" method="POST">
-					<div class="form-group">
-						<label for="name">Name</label>
-						<input type="text" id="name" name="name" placeholder="Your name" required />
-					</div>
+			<div class="contact-container">
+				<div class="info-block">
+					<h3>Direct Inquiries</h3>
+					<p><a href="mailto:colorist@example.com" class="email-link">colorist@example.com</a></p>
+				</div>
 
-					<div class="form-group">
-						<label for="email">Email</label>
-						<input type="email" id="email" name="email" placeholder="your.email@example.com" required />
-					</div>
+				<div class="info-block">
+					<h3>Location & Timezone</h3>
+					<p>Based in London • Available Worldwide (GMT/UTC)</p>
+				</div>
 
-					<div class="form-group">
-						<label for="project-type">Project Type</label>
-						<select id="project-type" name="project-type">
-							<option value="commercial">Commercial</option>
-							<option value="feature">Feature Film / Narrative</option>
-							<option value="music-video">Music Video</option>
-							<option value="documentary">Documentary</option>
-							<option value="other">Other</option>
-						</select>
-					</div>
+				<div class="info-block">
+					<h3>Representation</h3>
+					<p><strong>Agency:</strong> Vision Artists</p>
+					<p><strong>Booking Agent:</strong> <a href="mailto:agent@visionartists.com">agent@visionartists.com</a></p>
+				</div>
 
-					<div class="form-group">
-						<label for="message">Project Details & Timeline</label>
-						<textarea id="message" name="message" rows="5" placeholder="Tell me about the project, camera formats, timeline, and budget..." required></textarea>
-					</div>
-
-					<button type="submit" class="submit-btn">Send Inquiry</button>
-				</form>
-
-				<!-- Direct Details & Representation -->
-				<div class="contact-info">
-					<div class="info-block">
-						<h3>Direct Contact</h3>
-						<p><a href="mailto:colorist@example.com">colorist@example.com</a></p>
-					</div>
-
-					<div class="info-block">
-						<h3>Location & Timezone</h3>
-						<p>Based in London / Available Worldwide (GMT/UTC)</p>
-					</div>
-
-					<div class="info-block">
-						<h3>Representation / Agent</h3>
-						<p><strong>Agency Name:</strong> Vision Artists</p>
-						<p><strong>Agent Email:</strong> agent@visionartists.com</p>
-					</div>
-
-					<div class="info-block">
-						<h3>Profiles</h3>
-						<div class="social-links">
-							<a href="https://vimeo.com" target="_blank" rel="noopener">Vimeo</a>
-							<a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
-							<a href="https://imdb.com" target="_blank" rel="noopener">IMDb</a>
-						</div>
+				<div class="info-block">
+					<h3>Profiles</h3>
+					<div class="social-links">
+						<a href="https://vimeo.com" target="_blank" rel="noopener">Vimeo</a>
+						<a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+						<a href="https://imdb.com" target="_blank" rel="noopener">IMDb</a>
 					</div>
 				</div>
 			</div>
@@ -82,110 +48,79 @@ import Footer from '../components/Footer.astro';
 
 		<style>
 			main {
-				max-width: 1100px;
+				max-width: 800px;
 				margin: 0 auto;
-				padding: 8em 2em 4em 2em;
+				padding: 9em 2em 5em 2em;
 			}
 			.contact-header {
-				margin-bottom: 3rem;
+				margin-bottom: 4rem;
 			}
 			.contact-header h1 {
 				font-size: 3rem;
 				margin-bottom: 0.5rem;
+				letter-spacing: -0.02em;
 			}
 			.contact-header p {
 				color: var(--gray);
-				font-size: 1.1rem;
+				font-size: 1.15rem;
 				margin: 0;
 			}
-			.contact-grid {
-				display: grid;
-				grid-template-columns: 1.2fr 0.8fr;
-				gap: 4rem;
-			}
-			.contact-form {
+			.contact-container {
 				display: flex;
 				flex-direction: column;
-				gap: 1.5rem;
-			}
-			.form-group {
-				display: flex;
-				flex-direction: column;
-				gap: 0.5rem;
-			}
-			label {
-				font-size: 0.85rem;
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				color: var(--gray);
-			}
-			input, select, textarea {
+				gap: 3rem;
 				background: rgb(var(--gray-light));
-				border: 1px solid rgba(255, 255, 255, 0.08);
-				border-radius: 6px;
-				padding: 0.85em 1em;
-				color: rgb(var(--black));
-				font-family: inherit;
-				font-size: 0.95rem;
-				outline: none;
-				transition: border-color 0.2s ease;
-			}
-			input:focus, select:focus, textarea:focus {
-				border-color: var(--accent);
-			}
-			.submit-btn {
-				background: var(--accent);
-				color: rgb(var(--black));
-				border: none;
-				padding: 1em 2em;
-				border-radius: 6px;
-				font-weight: 700;
-				font-size: 0.95rem;
-				cursor: pointer;
-				transition: background-color 0.2s ease;
-				margin-top: 0.5rem;
-			}
-			.submit-btn:hover {
-				background: var(--accent-dark);
-			}
-			.contact-info {
-				display: flex;
-				flex-direction: column;
-				gap: 2.5rem;
+				padding: 3rem;
+				border-radius: 12px;
+				border: 1px solid rgba(255, 255, 255, 0.05);
 			}
 			.info-block h3 {
-				font-size: 1.1rem;
+				font-size: 0.85rem;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: var(--gray);
 				margin-bottom: 0.5rem;
-				color: rgb(var(--black));
 			}
 			.info-block p {
-				color: var(--gray);
+				color: #fff;
 				margin: 0;
-				font-size: 0.95rem;
+				font-size: 1.1rem;
+			}
+			.email-link {
+				font-size: 1.5rem;
+				font-weight: 600;
+				color: var(--accent);
+				text-decoration: none;
+			}
+			.email-link:hover {
+				text-decoration: underline;
 			}
 			.info-block strong {
 				color: rgb(var(--black));
 			}
 			.social-links {
 				display: flex;
-				gap: 1.5rem;
+				gap: 2rem;
+				margin-top: 0.25rem;
 			}
 			.social-links a {
-				color: var(--gray);
-				font-size: 0.95rem;
+				color: #fff;
+				font-size: 1.1rem;
 				text-decoration: none;
 				transition: color 0.2s ease;
 			}
 			.social-links a:hover {
 				color: var(--accent);
 			}
-			@media (max-width: 860px) {
+			@media (max-width: 768px) {
 				main {
 					padding: 7em 1em 3em 1em;
 				}
-				.contact-grid {
-					grid-template-columns: 1fr;
-					gap: 3rem;
+				.contact-container {
+					padding: 1.5rem;
+				}
+				.email-link {
+					font-size: 1.2rem;
 				}
 			}
 		</style>
