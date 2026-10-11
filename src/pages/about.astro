@@ -1,109 +1,91 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title="About | Film Colourist Portfolio" description="Professional background, grading suite setup, and technical specifications of the colourist." />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="about-hero">
-				<h1>About Me</h1>
-				<p class="subtitle">Senior Film Colourist</p>
-			</section>
+<BaseLayout
+	title="About | Film Colourist Portfolio"
+	description="Professional background, grading suite setup, and technical specifications of the colourist."
+	width="narrow"
+>
+	<header class="page-header">
+		<span class="eyebrow">Senior Film Colourist</span>
+		<h1>About Me</h1>
+	</header>
 
-			<div class="about-content">
-				<div class="bio-text">
-					<p>
-						With over a decade of experience in post-production, I specialize in crafting distinctive visual identities for feature films, high-end commercials, and music videos. My approach blends technical precision with deep narrative empathy, ensuring every frame serves the emotional core of the story.
-					</p>
-					<p>
-						Whether working in ACES or DaVinci Wide Gamut, I collaborate closely with directors and cinematographers from pre-production look development through to final delivery, ensuring seamless continuity and striking cinematic contrast.
-					</p>
-				</div>
+	<div class="bio">
+		<p>
+			With over a decade of experience in post-production, I specialize in crafting distinctive visual identities for feature films, high-end commercials, and music videos. My approach blends technical precision with deep narrative empathy, ensuring every frame serves the emotional core of the story.
+		</p>
+		<p>
+			Whether working in ACES or DaVinci Wide Gamut, I collaborate closely with directors and cinematographers from pre-production look development through to final delivery, ensuring seamless continuity and striking cinematic contrast.
+		</p>
+	</div>
 
-				<div class="specs-box">
-					<h2>Suite & Hardware Specifications</h2>
-					<ul>
-						<li><strong>Software:</strong> DaVinci Resolve Studio / Baselight</li>
-						<li><strong>Monitoring:</strong> Flanders Scientific (FSI) Calibrated Reference Display</li>
-						<li><strong>Environment:</strong> D65 Spectrally Balanced Controlled Lighting Environment (Rec. 709 / DCI-P3 / Rec. 2020)</li>
-						<li><strong>Control Surface:</strong> DaVinci Resolve Advanced Panel</li>
-					</ul>
-				</div>
+	<section class="panel specs" aria-labelledby="specs-heading">
+		<h2 id="specs-heading" class="section-title">Suite &amp; Hardware</h2>
+		<dl>
+			<div>
+				<dt>Software</dt>
+				<dd>DaVinci Resolve Studio / Baselight</dd>
 			</div>
-		</main>
-		<Footer />
+			<div>
+				<dt>Monitoring</dt>
+				<dd>Flanders Scientific (FSI) Calibrated Reference Display</dd>
+			</div>
+			<div>
+				<dt>Environment</dt>
+				<dd>D65 Spectrally Balanced Controlled Lighting Environment (Rec. 709 / DCI-P3 / Rec. 2020)</dd>
+			</div>
+			<div>
+				<dt>Control Surface</dt>
+				<dd>DaVinci Resolve Advanced Panel</dd>
+			</div>
+		</dl>
+	</section>
+</BaseLayout>
 
-		<style>
-			main {
-				max-width: 900px;
-				margin: 0 auto;
-				padding: 8em 2em 4em 2em;
-			}
-			.about-hero {
-				margin-bottom: 3rem;
-			}
-			.about-hero h1 {
-				font-size: 3rem;
-				margin-bottom: 0.5rem;
-			}
-			.subtitle {
-				font-size: 1.15rem;
-				color: var(--accent);
-				font-weight: 500;
-				margin: 0;
-			}
-			.about-content {
-				display: flex;
-				flex-direction: column;
-				gap: 3rem;
-			}
-			.bio-text p {
-				font-size: 1.1rem;
-				line-height: 1.8;
-				color: #d1d5db;
-			}
-			.specs-box {
-				background: rgb(var(--gray-light));
-				padding: 2.5rem;
-				border-radius: 8px;
-				border: 1px solid rgba(255, 255, 255, 0.05);
-			}
-			.specs-box h2 {
-				font-size: 1.5rem;
-				margin-bottom: 1.5rem;
-				color: rgb(var(--black));
-			}
-			.specs-box ul {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-				display: flex;
-				flex-direction: column;
-				gap: 1rem;
-			}
-			.specs-box li {
-				color: var(--gray);
-				font-size: 0.95rem;
-			}
-			.specs-box strong {
-				color: rgb(var(--black));
-				margin-right: 0.5rem;
-			}
-			@media (max-width: 768px) {
-				main {
-					padding: 7em 1em 3em 1em;
-				}
-				.specs-box {
-					padding: 1.5rem;
-				}
-			}
-		</style>
-	</body>
-</html>
+<style>
+	.bio {
+		margin-bottom: clamp(2rem, 6vw, 3.5rem);
+	}
+	.bio p {
+		font-size: var(--text-lg);
+		line-height: 1.8;
+	}
+	.specs h2 {
+		margin-bottom: 1.5rem;
+	}
+	dl {
+		display: grid;
+		gap: 1.25rem;
+		margin: 0;
+	}
+	dl > div {
+		display: grid;
+		grid-template-columns: 9rem 1fr;
+		gap: 0.25rem 1.5rem;
+		padding-bottom: 1.25rem;
+		border-bottom: 1px solid var(--border);
+	}
+	dl > div:last-child {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
+	dt {
+		color: var(--text-muted);
+		font-size: var(--text-sm);
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		padding-top: 0.2em;
+	}
+	dd {
+		margin: 0;
+		color: var(--text-body);
+	}
+	@media (max-width: 560px) {
+		dl > div {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

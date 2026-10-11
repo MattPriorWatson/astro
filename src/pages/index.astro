@@ -1,159 +1,39 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 
-const allProjects = await getCollection('projects');
-const featuredProjects = allProjects.filter(project => project.data.featured);
+const featuredProjects = (await getCollection('projects'))
+	.filter((project) => project.data.featured)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<!-- Hero Showreel Section -->
-			<section class="hero">
-				<div class="reel-container">
-					<iframe 
-						src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-						title="Showreel" 
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-						allowfullscreen>
-					</iframe>
-				</div>
-			</section>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION} width="wide">
+	<section class="hero" aria-label="Showreel">
+		<VideoEmbed src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Showreel" />
+	</section>
 
-			<!-- Featured Work Gallery -->
-			<section class="featured-work">
-				<h2>Featured Work</h2>
+	{
+		featuredProjects.length > 0 && (
+			<section aria-labelledby="featured-heading">
+				<div class="section-head">
+					<h2 id="featured-heading" class="section-title">Featured Work</h2>
+					<a class="text-link" href="/work">View all work →</a>
+				</div>
 				<div class="projects-grid">
-					{featuredProjects.map(project => (
-						<a href={`/projects/${project.slug || project.id}`} class="project-card">
-							<div class="image-wrapper">
-								<img src={project.data.heroImage} alt={project.data.title} />
-								<div class="card-overlay">
-									<span class="category-tag">{project.data.category}</span>
-									<h3>{project.data.title}</h3>
-								</div>
-							</div>
-						</a>
+					{featuredProjects.map((project, i) => (
+						<ProjectCard project={project} eager={i < 2} />
 					))}
 				</div>
 			</section>
-		</main>
-		<Footer />
+		)
+	}
+</BaseLayout>
 
-		<style>
-			main {
-				max-width: 1400px;
-				margin: 0 auto;
-				padding: 7em 2em 4em 2em;
-			}
-			.hero {
-				margin-bottom: 5rem;
-			}
-			.reel-container {
-				position: relative;
-				padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-				height: 0;
-				overflow: hidden;
-				border-radius: 12px;
-				background: #000;
-				box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
-			}
-			.reel-container iframe {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				border: 0;
-			}
-			.featured-work h2 {
-				font-size: 1.5rem;
-				text-transform: uppercase;
-				letter-spacing: 0.1em;
-				color: var(--gray);
-				margin-bottom: 2rem;
-			}
-			.projects-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-				gap: 2.5rem;
-			}
-			.project-card {
-				display: block;
-				border-radius: 10px;
-				overflow: hidden;
-				text-decoration: none;
-				background: #000;
-				border: 1px solid rgba(255, 255, 255, 0.05);
-				transition: transform 0.4s ease, box-shadow 0.4s ease;
-			}
-			.project-card:hover {
-				transform: translateY(-6px);
-				box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-			}
-			.image-wrapper {
-				position: relative;
-				aspect-ratio: 16/10;
-				overflow: hidden;
-			}
-			.image-wrapper img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-			}
-			.project-card:hover .image-wrapper img {
-				transform: scale(1.04);
-			}
-			.card-overlay {
-				position: absolute;
-				inset: 0;
-				background: linear-gradient(to top, rgba(18, 20, 23, 0.9) 0%, rgba(18, 20, 23, 0.2) 50%, transparent 100%);
-				display: flex;
-				flex-direction: column;
-				justify-content: flex-end;
-				padding: 2rem;
-				opacity: 0.9;
-				transition: opacity 0.3s ease;
-			}
-			.project-card:hover .card-overlay {
-				opacity: 1;
-			}
-			.category-tag {
-				font-size: 0.75rem;
-				text-transform: uppercase;
-				letter-spacing: 0.1em;
-				color: var(--accent);
-				font-weight: 700;
-				margin-bottom: 0.5rem;
-			}
-			.card-overlay h3 {
-				font-size: 1.8rem;
-				margin: 0;
-				color: #fff;
-				font-weight: 600;
-				letter-spacing: -0.01em;
-			}
-			@media (max-width: 768px) {
-				main {
-					padding: 6em 1em 3em 1em;
-				}
-				.projects-grid {
-					grid-template-columns: 1fr;
-				}
-				.card-overlay h3 {
-					font-size: 1.4rem;
-				}
-			}
-		</style>
-	</body>
-</html>
+<style>
+	.hero {
+		margin-bottom: clamp(3rem, 8vw, 5rem);
+	}
+</style>

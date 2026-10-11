@@ -3,181 +3,208 @@ import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		
-		<div class="internal-links" id="nav-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/work">Work</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-			<HeaderLink href="/contact">Contact</HeaderLink>
-		</div>
+<header class="site-header">
+	<nav class="site-nav" aria-label="Main">
+		<a class="brand" href="/">{SITE_TITLE}</a>
 
-		<button id="hamburger-btn" class="hamburger" aria-label="Toggle navigation menu">
+		<button
+			id="menu-toggle"
+			class="menu-toggle"
+			type="button"
+			aria-label="Menu"
+			aria-expanded="false"
+			aria-controls="nav-links"
+		>
 			<span></span>
 			<span></span>
 			<span></span>
 		</button>
+
+		<div class="nav-links" id="nav-links">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/work" matches={['/projects']}>Work</HeaderLink>
+			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href="/contact">Contact</HeaderLink>
+		</div>
 	</nav>
 </header>
 
 <style>
-	header {
+	.site-header {
 		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
+		inset: 0 0 auto 0;
 		z-index: 1000;
-		background: transparent;
-		transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-bottom 0.3s ease;
-		box-sizing: border-box;
-		padding: 0 2em;
+		padding-inline: var(--gutter);
 	}
 
-	/* Adds a subtle frosted glass look when scrolling down */
-	header.scrolled {
-		background: rgba(18, 20, 23, 0.85);
+	/*
+	 * The frosted-glass background lives on a pseudo-element, NOT on the header.
+	 * backdrop-filter on the header would turn it into the containing block for the
+	 * fixed-position mobile menu and clip the overlay to the header's height.
+	 */
+	.site-header::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: rgba(14, 16, 19, 0.85);
 		backdrop-filter: blur(12px);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+		-webkit-backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--border);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+	.site-header.scrolled::before,
+	:global(html.menu-open) .site-header::before {
+		opacity: 1;
 	}
 
-	nav {
+	.site-nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		max-width: 1200px;
-		margin: 0 auto;
-		height: 80px;
+		max-width: var(--width-default);
+		height: var(--header-h);
+		margin-inline: auto;
 	}
 
-	h2 {
-		margin: 0;
-		font-size: 1.25rem;
+	.brand {
+		position: relative;
+		z-index: 11;
+		color: var(--text);
+		font-size: 1.2rem;
 		font-weight: 700;
 		letter-spacing: -0.01em;
 	}
-
-	h2 a {
-		color: rgb(var(--black));
-		text-decoration: none;
+	.brand:hover {
+		color: var(--text);
 	}
 
-	.internal-links {
+	.nav-links {
 		display: flex;
-		gap: 2.5rem;
 		align-items: center;
+		gap: 2.25rem;
 	}
-
-	.internal-links a {
-		color: var(--gray);
-		text-decoration: none;
-		font-size: 0.95rem;
-		font-weight: 500;
-		transition: color 0.2s ease;
+	.nav-links :global(a) {
+		color: var(--text-muted);
+		font-size: var(--text-sm);
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
 		padding: 0.5em 0;
 		border-bottom: 2px solid transparent;
+		transition: color 0.2s ease, border-color 0.2s ease;
 	}
-
-	.internal-links a:hover,
-	.internal-links a.active {
-		color: rgb(var(--black));
+	.nav-links :global(a:hover),
+	.nav-links :global(a.active) {
+		color: var(--text);
+	}
+	.nav-links :global(a.active) {
 		border-bottom-color: var(--accent);
 	}
 
-	/* Hamburger Button Style */
-	.hamburger {
+	.menu-toggle {
 		display: none;
-		flex-direction: column;
-		justify-content: space-between;
-		width: 28px;
-		height: 20px;
-		background: transparent;
-		border: none;
-		cursor: pointer;
+		position: relative;
+		z-index: 11;
+		width: 44px;
+		height: 44px;
+		margin-right: -10px;
 		padding: 0;
-		z-index: 10;
+		background: transparent;
+		border: 0;
+		cursor: pointer;
+		color: var(--text);
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		gap: 5px;
 	}
-
-	.hamburger span {
-		width: 100%;
+	.menu-toggle span {
+		display: block;
+		width: 24px;
 		height: 2px;
-		background-color: rgb(var(--black));
-		transition: all 0.3s ease;
+		background: currentColor;
 		border-radius: 2px;
+		transition: transform 0.3s ease, opacity 0.2s ease;
+	}
+	.menu-toggle[aria-expanded='true'] span:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+	.menu-toggle[aria-expanded='true'] span:nth-child(2) {
+		opacity: 0;
+	}
+	.menu-toggle[aria-expanded='true'] span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
 	}
 
-	/* Mobile Responsive Styles */
 	@media (max-width: 768px) {
-		header {
-			padding: 0 1.25em;
-		}
-		
-		.hamburger {
+		.menu-toggle {
 			display: flex;
 		}
 
-		.internal-links {
+		.nav-links {
 			position: fixed;
-			top: 0;
-			right: -100%;
-			width: 100%;
+			inset: 0;
+			z-index: 10;
 			height: 100vh;
-			background: rgba(18, 20, 23, 0.98);
-			backdrop-filter: blur(20px);
+			height: 100dvh;
 			flex-direction: column;
 			justify-content: center;
-			align-items: center;
-			gap: 2rem;
-			transition: right 0.35s ease-in-out;
-			z-index: 5;
-		}
-
-		.internal-links.expanded {
-			right: 0;
-		}
-
-		.internal-links a {
-			font-size: 1.4rem;
-		}
-
-		/* Hamburger Animation */
-		.hamburger.active span:nth-child(1) {
-			transform: translateY(9px) rotate(45deg);
-		}
-		.hamburger.active span:nth-child(2) {
+			gap: 1.75rem;
+			background: rgba(14, 16, 19, 0.98);
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+			/* hidden state removes links from tab order and the a11y tree */
+			visibility: hidden;
 			opacity: 0;
+			transform: translateY(-8px);
+			transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
 		}
-		.hamburger.active span:nth-child(3) {
-			transform: translateY(-9px) rotate(-45deg);
+		.nav-links.expanded {
+			visibility: visible;
+			opacity: 1;
+			transform: none;
+			transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s;
+		}
+		.nav-links :global(a) {
+			font-size: 1.35rem;
 		}
 	}
 </style>
 
 <script>
-	const btn = document.getElementById('hamburger-btn');
-	const navLinks = document.getElementById('nav-links');
-	
-	btn?.addEventListener('click', () => {
-		navLinks?.classList.toggle('expanded');
-		btn.classList.toggle('active');
+	const header = document.querySelector<HTMLElement>('.site-header');
+	const toggle = document.getElementById('menu-toggle');
+	const links = document.getElementById('nav-links');
+	const root = document.documentElement;
+
+	function setMenu(open: boolean) {
+		toggle?.setAttribute('aria-expanded', String(open));
+		links?.classList.toggle('expanded', open);
+		root.classList.toggle('menu-open', open);
+	}
+
+	toggle?.addEventListener('click', () => {
+		setMenu(toggle.getAttribute('aria-expanded') !== 'true');
 	});
 
-	// Close menu when clicking a link on mobile
-	navLinks?.querySelectorAll('a').forEach(link => {
-		link.addEventListener('click', () => {
-			navLinks.classList.remove('expanded');
-			btn?.classList.remove('active');
-		});
+	// Close on link click, Escape, or when resizing up to desktop
+	links?.addEventListener('click', (e) => {
+		if ((e.target as Element).closest('a')) setMenu(false);
 	});
-
-	// Background transition on scroll
-	window.addEventListener('scroll', () => {
-		const header = document.querySelector('header');
-		if (window.scrollY > 30) {
-			header?.classList.add('scrolled');
-		} else {
-			header?.classList.remove('scrolled');
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+			setMenu(false);
+			toggle.focus();
 		}
 	});
+	window
+		.matchMedia('(min-width: 769px)')
+		.addEventListener('change', (e) => e.matches && setMenu(false));
+
+	// Frosted background once the page has scrolled
+	const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 30);
+	window.addEventListener('scroll', onScroll, { passive: true });
+	onScroll();
 </script>
