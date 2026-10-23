@@ -29,20 +29,11 @@ const stills = galleryImages.slice(0, 6);
 			<h1>{title}</h1>
 		</header>
 
+		{videoUrl && <div class="video-block"><VideoEmbed src={videoUrl} title={title} poster={heroImage} /></div>}
+
 		<div class="overview">
 			<slot />
 		</div>
-
-		{videoUrl && <div class="video-block"><VideoEmbed src={videoUrl} title={title} poster={heroImage} /></div>}
-
-		{
-			stills.length > 0 && (
-				<section class="extra" aria-labelledby="stills-heading">
-					<h2 id="stills-heading" class="section-title">Stills</h2>
-					<Gallery images={stills} title={title} />
-				</section>
-			)
-		}
 
 		{
 			credits.length > 0 && (
@@ -72,6 +63,15 @@ const stills = galleryImages.slice(0, 6);
 				</section>
 			)
 		}
+
+		{
+			stills.length > 0 && (
+				<section class="extra" aria-labelledby="stills-heading">
+					<h2 id="stills-heading" class="section-title">Stills</h2>
+					<Gallery images={stills} title={title} />
+				</section>
+			)
+		}
 	</article>
 </BaseLayout>
 
@@ -85,17 +85,18 @@ const stills = galleryImages.slice(0, 6);
 		margin-bottom: 2rem;
 	}
 
+	.video-block {
+		margin-bottom: clamp(2rem, 5vw, 3.5rem);
+	}
+
 	.overview {
 		max-width: 60ch;
-		margin-bottom: clamp(2rem, 5vw, 3rem);
+		margin-bottom: clamp(2.5rem, 6vw, 4rem);
 		line-height: 1.8;
-	}
-	.video-block {
-		margin-bottom: clamp(4rem, 10vw, 7rem);
 	}
 
 	.extra {
-		margin-bottom: clamp(3rem, 8vw, 5rem);
+		margin-bottom: clamp(3rem, 6vw, 5rem);
 	}
 	.extra .section-title {
 		margin-bottom: 1.5rem;

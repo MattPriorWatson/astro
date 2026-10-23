@@ -1,64 +1,141 @@
-# Astro Starter Kit: Blog
+# Matt Prior Watson — Film Colourist Portfolio
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+A minimalist, high-performance portfolio website built with [Astro](https://astro.build) and configured for deployment on [Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/).
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+---
 
-<!-- dash-content-start -->
+## 📁 Where to Change Information
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+All personal details, text, and settings are organized in specific files:
 
-Features:
+### 1. Global Site Settings & Socials
+- **File:** `src/data/site.json`
+  - `reelPoster`: Path to the homepage showreel thumbnail (e.g. `"/reel-poster.jpg"`).
+  - `profileImage`: Path to portrait for the About page (e.g. `"/profile.jpg"`).
+  - `profileAlt`: Accessible description for the portrait.
+  - `cvUrl`: Path to your downloadable CV PDF (e.g. `"/cv.pdf"`) or an external link.
+  - `socials`: List of social media links. Uses open-source [Simple Icons](https://simpleicons.org) CDN slugs for automatic vector icons (e.g., `"vimeo"`, `"instagram"`, `"imdb"`, `"linkedin"`, `"youtube"`).
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Built-in Observability logging
+- **File:** `src/consts.ts`
+  - `SITE_TITLE`: Your name as it appears in the header and SEO title tag (`"Matt Prior Watson"`).
+  - `SITE_DESCRIPTION`: Default description used in search engine results and social shares.
 
-<!-- dash-content-end -->
+---
 
-## Getting Started
+### 2. Homepage & Showreel
+- **File:** `src/pages/index.astro`
+  - Contains the showreel video embed:
+    ```astro
+    <VideoEmbed
+      src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+      title="Showreel"
+      poster={reelPoster}
+    />
+    ```
+  - Supports YouTube embeds (`https://www.youtube.com/embed/...`) and Vimeo player embeds (`https://player.vimeo.com/video/...`).
+  - Clicking the video smoothly replaces the poster thumbnail with the autoplaying iframe without layout shifts.
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+---
 
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+### 3. Projects & Credits (Film / Commercials / Music Videos)
+Each project has its own Markdown file in `src/content/projects/`.
+
+To add a new project, create a new file like `src/content/projects/my-project.md`:
+
+```markdown
+---
+title: "Project Title"
+description: "Brief summary of the project for search engines."
+pubDate: "October 2024"
+category: "Commercial" # e.g. Commercial, Feature Film, Music Video, Short Film
+videoUrl: "https://www.youtube.com/embed/YOUR_VIDEO_ID"
+heroImage: "/my-project/hero.jpg"
+galleryImages:
+  - "/my-project/still-1.jpg"
+  - "/my-project/still-2.jpg"
+  - "/my-project/still-3.jpg"
+  - "/my-project/still-4.jpg"
+  - "/my-project/still-5.jpg"
+  - "/my-project/still-6.jpg"
+credits:
+  - role: "Director"
+    name: "Director Name"
+  - role: "Director of Photography"
+    name: "DOP Name"
+  - role: "Production Company"
+    name: "Company Name"
+awards:
+  - "Winner - Best Cinematography, Festival 2024"
+---
+
+Write your project overview, color grade approach, LUT details, and narrative notes here.
 ```
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+- **Project Page Structure:**
+  1. Category eyebrow & Title
+  2. Main video player (with `heroImage` thumbnail facade)
+  3. Bio / Overview text
+  4. Credits list
+  5. Awards list (if present)
+  6. 2 or 3-column Stills Gallery with full-screen lightbox viewer
 
-## 🚀 Project Structure
+---
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### 4. About Page
+- **File:** `src/pages/about.astro`
+  - Edit the bio paragraphs, color suites/software worked in (DaVinci Resolve, ACES, Baselight), and approach.
+  - Automatically loads `profileImage` and `cvUrl` from `src/data/site.json`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+---
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+### 5. Contact Page
+- **File:** `src/pages/contact.astro`
+  - **Direct Inquiries:** Update `mailto:colorist@example.com`.
+  - **Location & Timezone:** Update your base city and working availability.
+  - **Representation:** Update agency name and agent booking email.
+  - Social profile links are automatically generated from `site.json`.
 
-Any static assets, like images, can be placed in the `public/` directory.
+---
 
-## 🧞 Commands
+## 🖼️ What Images to Upload (in `public/`)
 
-All commands are run from the root of the project, from a terminal:
+All static media should be placed inside the `public/` folder so they are served directly at the root URL.
 
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
-| `npm wrangler tail`               | View real-time logs for all Workers              |
+| Asset | File Path in `public/` | Recommended Dimensions | Ratio | Notes |
+|---|---|---|---|---|
+| **Showreel Poster** | `/public/reel-poster.jpg` | 1920 × 1080 px | 16:9 | High-res still shown on the homepage before playing the showreel. Also acts as default social share image. |
+| **Profile Portrait** | `/public/profile.jpg` | 800 × 1000 px | 4:5 | Portrait photo for the About page. |
+| **CV Document** | `/public/cv.pdf` | Standard A4 / Letter | N/A | Downloadable resume linked on the About page. |
+| **Project Hero** | `/public/<project-name>/hero.jpg` | 1920 × 1080 px | 16:9 | Displayed on the `/credits` grid card and as the project's video player thumbnail. |
+| **Project Stills** | `/public/<project-name>/still-1.jpg`, etc. | 1920 × 1080 px or native | 16:9 (or 2.39:1 scope) | Up to 6 stills per project. Displayed in the 2-3 column gallery; opens full-size in the lightbox. |
+| **Favicon** | `/public/favicon.svg` | SVG vector | 1:1 | Browser tab icon. |
 
-## 👀 Want to learn more?
+> **Tip:** Keep image file sizes optimised (under 500 KB per still, JPG or WebP) for fast page loading.
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+---
 
-## Credit
+## 🧞 Available Commands
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Run these from the project root in your terminal:
+
+| Command | Action |
+|---|---|
+| `npm install` | Install all dependencies |
+| `npm run dev` | Launch local development server (`http://localhost:4321`) |
+| `npm run build` | Build production site into `./dist/` |
+| `npm run preview` | Preview production build locally |
+| `npm run deploy` | Deploy production site to Cloudflare Workers |
+| `npm run cf-typegen` | Regenerate Cloudflare worker TypeScript types |
+
+---
+
+## ☁️ Deployment
+
+This project uses `@astrojs/cloudflare` with static asset deployment on Cloudflare Workers.
+
+To deploy changes to Cloudflare:
+```bash
+npm run build
+npm run deploy
+```
+Make sure you are logged into Wrangler (`npx wrangler login`).
