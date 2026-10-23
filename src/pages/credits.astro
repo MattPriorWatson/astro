@@ -11,7 +11,7 @@ const projects = (await getCollection('projects')).sort(
 <BaseLayout
 	title="Credits | Film Colourist Portfolio"
 	description="Selected color grading credits across commercials, feature films, and music videos."
-	width="default"
+	width="wide"
 >
 	<header class="page-header">
 		<h1>Credits</h1>
@@ -19,9 +19,9 @@ const projects = (await getCollection('projects')).sort(
 
 	{
 		projects.length > 0 ? (
-			<div class="credits-list">
+			<div class="projects-grid">
 				{projects.map((project, i) => (
-					<ProjectCard project={project} eager={i < 2} />
+					<ProjectCard project={project} eager={i < 4} />
 				))}
 			</div>
 		) : (
@@ -29,11 +29,3 @@ const projects = (await getCollection('projects')).sort(
 		)
 	}
 </BaseLayout>
-
-<style>
-	.credits-list {
-		display: flex;
-		flex-direction: column;
-		gap: clamp(3rem, 8vw, 5.5rem);
-	}
-</style>

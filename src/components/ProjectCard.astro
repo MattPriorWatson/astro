@@ -8,7 +8,8 @@ interface Props {
 }
 
 const { project, eager = false } = Astro.props;
-const { title, category, heroImage } = project.data;
+const { title, category, heroImage, pubDate } = project.data;
+const year = new Date(pubDate).getFullYear();
 ---
 
 <a href={`/projects/${project.slug}`} class="project-card">
@@ -23,8 +24,11 @@ const { title, category, heroImage } = project.data;
 		/>
 	</div>
 	<div class="caption">
+		<div class="caption-meta">
+			<span class="label">{category}</span>
+			<span class="year">{year}</span>
+		</div>
 		<h3>{title}</h3>
-		<span class="label">{category}</span>
 	</div>
 </a>
 
@@ -39,27 +43,36 @@ const { title, category, heroImage } = project.data;
 	.media {
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
-		background: #000;
+		background: #111;
 	}
 	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		transition: opacity 0.25s ease;
+		transition: transform 0.35s ease, opacity 0.25s ease;
 	}
 	.project-card:hover img,
 	.project-card:focus-visible img {
-		opacity: 0.8;
+		transform: scale(1.03);
+		opacity: 0.85;
 	}
 	.caption {
+		padding-top: 0.9rem;
+	}
+	.caption-meta {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.35rem;
-		margin-top: 1.1rem;
-		text-align: center;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.5rem;
+		margin-bottom: 0.35rem;
+	}
+	.year {
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+		letter-spacing: 0.08em;
 	}
 	h3 {
 		margin: 0;
+		font-size: var(--text-h3);
 	}
 </style>

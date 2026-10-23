@@ -33,7 +33,7 @@ const stills = galleryImages.slice(0, 6);
 			<slot />
 		</div>
 
-		{videoUrl && <div class="video-block"><VideoEmbed src={videoUrl} title={title} /></div>}
+		{videoUrl && <div class="video-block"><VideoEmbed src={videoUrl} title={title} poster={heroImage} /></div>}
 
 		{
 			stills.length > 0 && (

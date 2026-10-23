@@ -3,67 +3,77 @@ import { SITE_TITLE } from '../consts';
 import site from '../data/site.json';
 
 const year = new Date().getFullYear();
-const { footerText, socials } = site;
+const { socials } = site;
 ---
 
 <footer class="site-footer">
-	<div class="container">
-		{footerText && <p class="blurb">{footerText}</p>}
-
+	<div class="container footer-inner">
 		{
 			socials.length > 0 && (
-				<ul class="socials">
+				<ul class="socials" aria-label="Social profiles">
 					{socials.map((s) => (
 						<li>
-							<a href={s.url} target="_blank" rel="noopener noreferrer">
-								{s.label}
-								<span class="sr-only"> (opens in a new tab)</span>
+							<a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} (opens in a new tab)`}>
+								<img
+									src={`https://cdn.simpleicons.org/${s.icon}/8f8f95`}
+									alt=""
+									aria-hidden="true"
+									width="18"
+									height="18"
+									loading="lazy"
+									decoding="async"
+								/>
 							</a>
 						</li>
 					))}
 				</ul>
 			)
 		}
-
 		<p class="copyright">&copy; {year} {SITE_TITLE}</p>
 	</div>
 </footer>
 
 <style>
 	.site-footer {
-		padding-block: 3rem;
+		padding-block: 2rem;
+		border-top: 1px solid var(--rule);
 	}
-	.blurb {
-		max-width: 52ch;
-		margin: 0 0 1.5rem;
-		color: var(--text-muted);
-		font-size: var(--text-sm);
-		line-height: 1.7;
+	.footer-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		flex-wrap: wrap;
 	}
 	.socials {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem 2rem;
-		margin: 0 0 2rem;
+		gap: 1.5rem;
+		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 	.socials a {
-		color: var(--text-muted);
-		font-size: var(--text-xs);
-		text-transform: uppercase;
-		letter-spacing: 0.16em;
-		transition: color 0.2s ease;
+		display: flex;
+		align-items: center;
+		line-height: 0;
+		transition: opacity 0.2s ease;
 	}
 	.socials a:hover {
-		color: var(--text);
 		opacity: 1;
+	}
+	.socials img {
+		/* Brand-coloured SVGs → match --text-muted, brighten on hover via parent opacity */
+		filter: brightness(0) invert(0.58);
+		transition: filter 0.2s ease;
+	}
+	.socials a:hover img {
+		filter: brightness(0) invert(0.9);
 	}
 	.copyright {
 		margin: 0;
 		color: var(--text-muted);
 		font-size: var(--text-xs);
-		letter-spacing: 0.16em;
+		letter-spacing: 0.12em;
 		text-transform: uppercase;
 	}
 </style>

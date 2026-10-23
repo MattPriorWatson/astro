@@ -2,11 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import site from '../data/site.json';
+
+const { reelPoster } = site;
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION} width="wide">
 	<section class="hero" aria-label="Showreel">
-		<VideoEmbed src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Showreel" />
+		<VideoEmbed
+			src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+			title="Showreel"
+			poster={reelPoster}
+		/>
 	</section>
 </BaseLayout>
 
