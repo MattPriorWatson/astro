@@ -17,17 +17,17 @@ const { socials } = site;
 
 	<div class="contact">
 		<section>
-			<h2 class="label">Direct Inquiries</h2>
+			<h2 class="label contact-label">Direct Inquiries</h2>
 			<p><a href="mailto:colorist@example.com" class="email-link">colorist@example.com</a></p>
 		</section>
 
 		<section>
-			<h2 class="label">Location &amp; Timezone</h2>
+			<h2 class="label contact-label">Location &amp; Timezone</h2>
 			<p>Based in London • Available Worldwide (GMT/UTC)</p>
 		</section>
 
 		<section>
-			<h2 class="label">Representation</h2>
+			<h2 class="label contact-label">Representation</h2>
 			<p><span class="muted">Agency</span> Vision Artists</p>
 			<p><span class="muted">Booking</span> <a href="mailto:agent@visionartists.com">agent@visionartists.com</a></p>
 		</section>
@@ -35,7 +35,7 @@ const { socials } = site;
 		{
 			socials.length > 0 && (
 				<section>
-					<h2 class="label">Profiles</h2>
+					<h2 class="label contact-label">Profiles</h2>
 					<ul class="social-links">
 						{socials.map((s) => (
 							<li>
@@ -57,7 +57,7 @@ const { socials } = site;
 		display: grid;
 		gap: clamp(2rem, 5vw, 3rem);
 	}
-	.label {
+	.contact-label {
 		margin-bottom: 0.5rem;
 	}
 	.contact p {
