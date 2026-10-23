@@ -1,0 +1,11 @@
+{
+	"footerText": "Colourist based in London, available for local suites and remote grading worldwide. Get in touch to talk about your next project.",
+	"profileImage": "/profile.jpg",
+	"profileAlt": "Portrait of Matt Prior Watson",
+	"cvUrl": "/cv.pdf",
+	"socials": [
+		{ "label": "Vimeo", "url": "https://vimeo.com" },
+		{ "label": "Instagram", "url": "https://instagram.com" },
+		{ "label": "IMDb", "url": "https://imdb.com" }
+	]
+}

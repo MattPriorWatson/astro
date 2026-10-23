@@ -1,39 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { getCollection } from 'astro:content';
-
-const featuredProjects = (await getCollection('projects'))
-	.filter((project) => project.data.featured)
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION} width="wide">
 	<section class="hero" aria-label="Showreel">
 		<VideoEmbed src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Showreel" />
 	</section>
-
-	{
-		featuredProjects.length > 0 && (
-			<section aria-labelledby="featured-heading">
-				<div class="section-head">
-					<h2 id="featured-heading" class="section-title">Featured Work</h2>
-					<a class="text-link" href="/work">View all work →</a>
-				</div>
-				<div class="projects-grid">
-					{featuredProjects.map((project, i) => (
-						<ProjectCard project={project} eager={i < 2} />
-					))}
-				</div>
-			</section>
-		)
-	}
 </BaseLayout>
 
 <style>
 	.hero {
-		margin-bottom: clamp(4rem, 10vw, 7rem);
+		margin-bottom: clamp(1rem, 3vw, 2rem);
 	}
 </style>

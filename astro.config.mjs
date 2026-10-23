@@ -9,6 +9,9 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
 	site: "https://example.com",
 	integrations: [mdx(), sitemap()],
+	redirects: {
+		"/work": "/credits",
+	},
 	adapter: cloudflare({
 		platformProxy: {
 			enabled: true,

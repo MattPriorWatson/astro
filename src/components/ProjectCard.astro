@@ -5,14 +5,13 @@ interface Props {
 	project: CollectionEntry<'projects'>;
 	/** Set true for above-the-fold cards so the image isn't lazy-loaded. */
 	eager?: boolean;
-	showClient?: boolean;
 }
 
-const { project, eager = false, showClient = false } = Astro.props;
-const { title, category, client, heroImage } = project.data;
+const { project, eager = false } = Astro.props;
+const { title, category, heroImage } = project.data;
 ---
 
-<a href={`/projects/${project.slug}`} class="project-card" data-category={category}>
+<a href={`/projects/${project.slug}`} class="project-card">
 	<div class="media">
 		<img
 			src={heroImage}
@@ -25,9 +24,7 @@ const { title, category, client, heroImage } = project.data;
 	</div>
 	<div class="caption">
 		<h3>{title}</h3>
-		<span class="label">
-			{category}{showClient && client ? ` · ${client}` : ''}
-		</span>
+		<span class="label">{category}</span>
 	</div>
 </a>
 
@@ -39,7 +36,6 @@ const { title, category, client, heroImage } = project.data;
 	.project-card:hover {
 		opacity: 1;
 	}
-	/* Every card frame is 16:9; the image fills it (use "contain" to letterbox instead) */
 	.media {
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
@@ -57,15 +53,13 @@ const { title, category, client, heroImage } = project.data;
 	}
 	.caption {
 		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: 1rem;
-		margin-top: 0.85rem;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.35rem;
+		margin-top: 1.1rem;
+		text-align: center;
 	}
 	h3 {
 		margin: 0;
-	}
-	.label {
-		text-align: right;
 	}
 </style>

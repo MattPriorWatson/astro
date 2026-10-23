@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout
+	title="Credits | Film Colourist Portfolio"
+	description="Selected color grading credits across commercials, feature films, and music videos."
+	width="default"
+>
+	<header class="page-header">
+		<h1>Credits</h1>
+	</header>
+
+	{
+		projects.length > 0 ? (
+			<div class="credits-list">
+				{projects.map((project, i) => (
+					<ProjectCard project={project} eager={i < 2} />
+				))}
+			</div>
+		) : (
+			<p class="empty-state">No credits yet — check back soon.</p>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.credits-list {
+		display: flex;
+		flex-direction: column;
+		gap: clamp(3rem, 8vw, 5.5rem);
+	}
+</style>

@@ -1,26 +1,32 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import VideoEmbed from '../components/VideoEmbed.astro';
 import Gallery from '../components/Gallery.astro';
 
 type Props = CollectionEntry<'projects'>['data'];
 
-const { title, description, pubDate, client, category, videoUrl, heroImage, galleryImages = [] } = Astro.props;
+const {
+	title,
+	description,
+	category,
+	videoUrl,
+	heroImage,
+	galleryImages = [],
+	credits = [],
+	awards = [],
+} = Astro.props;
+
+const stills = galleryImages.slice(0, 6);
 ---
 
 <BaseLayout title={title} description={description} image={heroImage} type="article">
 	<article>
-		<a class="back-link text-link" href="/work">← All work</a>
+		<a class="back-link text-link" href="/credits">← All credits</a>
 
 		<header class="project-header">
 			<span class="eyebrow">{category}</span>
 			<h1>{title}</h1>
-			<p class="meta">
-				{client && <span>{client}</span>}
-				<FormattedDate date={pubDate} />
-			</p>
 		</header>
 
 		<div class="overview">
@@ -29,7 +35,43 @@ const { title, description, pubDate, client, category, videoUrl, heroImage, gall
 
 		{videoUrl && <div class="video-block"><VideoEmbed src={videoUrl} title={title} /></div>}
 
-		<Gallery images={galleryImages.slice(0, 6)} title={title} />
+		{
+			stills.length > 0 && (
+				<section class="extra" aria-labelledby="stills-heading">
+					<h2 id="stills-heading" class="section-title">Stills</h2>
+					<Gallery images={stills} title={title} />
+				</section>
+			)
+		}
+
+		{
+			credits.length > 0 && (
+				<section class="extra" aria-labelledby="credits-heading">
+					<h2 id="credits-heading" class="section-title">Credits</h2>
+					<dl>
+						{credits.map((c) => (
+							<div>
+								<dt>{c.role}</dt>
+								<dd>{c.name}</dd>
+							</div>
+						))}
+					</dl>
+				</section>
+			)
+		}
+
+		{
+			awards.length > 0 && (
+				<section class="extra" aria-labelledby="awards-heading">
+					<h2 id="awards-heading" class="section-title">Awards</h2>
+					<ul class="awards">
+						{awards.map((a) => (
+							<li>{a}</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
 	</article>
 </BaseLayout>
 
@@ -42,21 +84,57 @@ const { title, description, pubDate, client, category, videoUrl, heroImage, gall
 	.project-header {
 		margin-bottom: 2rem;
 	}
-	.meta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0 1.5rem;
-		margin: 1rem 0 0;
-		font-size: var(--text-sm);
-		color: var(--text-muted);
-	}
 
 	.overview {
 		max-width: 60ch;
-		margin-bottom: clamp(2.5rem, 7vw, 4.5rem);
+		margin-bottom: clamp(2rem, 5vw, 3rem);
 		line-height: 1.8;
 	}
 	.video-block {
-		margin-bottom: clamp(0.5rem, 1.5vw, 1rem);
+		margin-bottom: clamp(4rem, 10vw, 7rem);
+	}
+
+	.extra {
+		margin-bottom: clamp(3rem, 8vw, 5rem);
+	}
+	.extra .section-title {
+		margin-bottom: 1.5rem;
+	}
+
+	dl {
+		display: grid;
+		gap: 1rem;
+		margin: 0;
+	}
+	dl > div {
+		display: grid;
+		grid-template-columns: 12rem 1fr;
+		gap: 0.25rem 1.5rem;
+	}
+	dt {
+		font-size: var(--text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+		color: var(--text-muted);
+		padding-top: 0.35em;
+	}
+	dd {
+		margin: 0;
+		color: var(--text-body);
+	}
+
+	.awards {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 0.5rem;
+		color: var(--text-body);
+	}
+
+	@media (max-width: 560px) {
+		dl > div {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

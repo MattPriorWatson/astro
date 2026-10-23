@@ -1,12 +1,31 @@
 ---
 import { SITE_TITLE } from '../consts';
+import site from '../data/site.json';
 
 const year = new Date().getFullYear();
+const { footerText, socials } = site;
 ---
 
 <footer class="site-footer">
 	<div class="container">
-		<p>&copy; {year} {SITE_TITLE}</p>
+		{footerText && <p class="blurb">{footerText}</p>}
+
+		{
+			socials.length > 0 && (
+				<ul class="socials">
+					{socials.map((s) => (
+						<li>
+							<a href={s.url} target="_blank" rel="noopener noreferrer">
+								{s.label}
+								<span class="sr-only"> (opens in a new tab)</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			)
+		}
+
+		<p class="copyright">&copy; {year} {SITE_TITLE}</p>
 	</div>
 </footer>
 
@@ -14,7 +33,33 @@ const year = new Date().getFullYear();
 	.site-footer {
 		padding-block: 3rem;
 	}
-	p {
+	.blurb {
+		max-width: 52ch;
+		margin: 0 0 1.5rem;
+		color: var(--text-muted);
+		font-size: var(--text-sm);
+		line-height: 1.7;
+	}
+	.socials {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 2rem;
+		margin: 0 0 2rem;
+		padding: 0;
+		list-style: none;
+	}
+	.socials a {
+		color: var(--text-muted);
+		font-size: var(--text-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+		transition: color 0.2s ease;
+	}
+	.socials a:hover {
+		color: var(--text);
+		opacity: 1;
+	}
+	.copyright {
 		margin: 0;
 		color: var(--text-muted);
 		font-size: var(--text-xs);

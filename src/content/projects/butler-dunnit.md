@@ -3,6 +3,13 @@ title: "Butler Dunnit"
 description: "Film about end of world things"
 pubDate: "July 2024"
 client: "Bournemouth Film School"
+credits:
+  - role: "Director"
+    name: "Name Here"
+  - role: "Director of Photography"
+    name: "Name Here"
+awards:
+  - "Best Short, Festival Name 2024"
 category: "Commercial"
 videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
 heroImage: "/butler/butler.jpg"

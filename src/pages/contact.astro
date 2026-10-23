@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+
+const { socials } = site;
 ---
 
 <BaseLayout
@@ -29,14 +32,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			<p><span class="muted">Booking</span> <a href="mailto:agent@visionartists.com">agent@visionartists.com</a></p>
 		</section>
 
-		<section>
-			<h2 class="label">Profiles</h2>
-			<ul class="social-links">
-				<li><a href="https://vimeo.com" target="_blank" rel="noopener noreferrer">Vimeo<span class="sr-only"> (opens in a new tab)</span></a></li>
-				<li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram<span class="sr-only"> (opens in a new tab)</span></a></li>
-				<li><a href="https://imdb.com" target="_blank" rel="noopener noreferrer">IMDb<span class="sr-only"> (opens in a new tab)</span></a></li>
-			</ul>
-		</section>
+		{
+			socials.length > 0 && (
+				<section>
+					<h2 class="label">Profiles</h2>
+					<ul class="social-links">
+						{socials.map((s) => (
+							<li>
+								<a href={s.url} target="_blank" rel="noopener noreferrer">
+									{s.label}
+									<span class="sr-only"> (opens in a new tab)</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
 	</div>
 </BaseLayout>
 
