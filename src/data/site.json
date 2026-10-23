@@ -1,7 +1,7 @@
 {
 	"reelPoster": "/reel-poster.jpg",
 	"profileImage": "/profile.jpg",
-	"profileAlt": "Portrait of Matt Prior Watson",
+	"profileAlt": "Portrait",
 	"cvUrl": "/cv.pdf",
 	"socials": [
 		{ "label": "Vimeo", "url": "https://vimeo.com", "icon": "vimeo" },

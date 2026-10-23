@@ -6,11 +6,11 @@ client: "Bournemouth Film School"
 credits:
   - role: "Director"
     name: "Name Here"
-  - role: "Director of Photography"
+  - role: "Producer"
     name: "Name Here"
 awards:
   - "Best Short, Festival Name 2024"
-category: "Commercial"
+category: "Short Film"
 videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
 heroImage: "/butler/butler.jpg"
 galleryImages:
